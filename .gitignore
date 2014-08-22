@@ -1,1 +1,4 @@
 src/main/resources/AwsCredentials.properties
+bin
+.classpath
+.project
