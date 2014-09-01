@@ -2,6 +2,8 @@ package co.uk.tangentlabs.aws;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Instance;
@@ -20,23 +22,28 @@ public class EC2Inspector {
 	
 	private static final Region REGION = Region.getRegion(Regions.EU_WEST_1);
 	
-	public EC2Inspector() {
+	public EC2Inspector(List <JSONObject> instancesInfo) {
 		System.out.println("Creating new inspector");
-		AmazonEC2Client ec2client = new AmazonEC2Client(CREDENTIALS_PROVIDER);
-		ec2client.setRegion(REGION);
-		DescribeInstancesResult result = ec2client.describeInstances();
-		List <Reservation> reservationList  = result.getReservations();
-		for (Reservation res:reservationList) {
-			List <Instance> instanceList = res.getInstances();
-			for (Instance instance:instanceList) {
-				System.out.println("\n----------------------");
-				System.out.println("Instance IP: " + instance.getPublicIpAddress());
-				System.out.println("Instance ID: " + instance.getInstanceId());
-				System.out.println("Instance Name: " + instance.getKeyName());
-				System.out.println("----------------------\n");
-			}
-		}
+		    
+		
 		System.out.println("Finished");
+	}
+	
+	public void queryEC2() {
+	    AmazonEC2Client ec2client = new AmazonEC2Client(CREDENTIALS_PROVIDER);
+        ec2client.setRegion(REGION);
+        DescribeInstancesResult result = ec2client.describeInstances();
+        List <Reservation> reservationList  = result.getReservations();
+        for (Reservation res:reservationList) {
+            List <Instance> instanceList = res.getInstances();
+            for (Instance instance:instanceList) {
+                System.out.println("\n----------------------");
+                System.out.println("Instance IP: " + instance.getPublicIpAddress());
+                System.out.println("Instance ID: " + instance.getInstanceId());
+                System.out.println("Instance Name: " + instance.getKeyName());
+                System.out.println("----------------------\n");
+            }
+        }
 	}
 
     public static void main(String[] args) {
